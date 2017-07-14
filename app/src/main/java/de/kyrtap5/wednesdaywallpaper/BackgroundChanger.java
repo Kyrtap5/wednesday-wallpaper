@@ -1,9 +1,9 @@
 package de.kyrtap5.wednesdaywallpaper;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import java.io.IOException;
@@ -17,6 +17,7 @@ public class BackgroundChanger {
         manager = WallpaperManager.getInstance(context);
     }
 
+    //Set the device wallpaper to a resource file
     @SuppressLint("ResourceType")
     public void changeBackground(int resource) {
         try {
@@ -26,6 +27,15 @@ public class BackgroundChanger {
         }
     }
 
+    public void changeBackground(Bitmap bitmap) {
+        try {
+            manager.setBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Get the current device wallpaper
     public Drawable getBackground() {
         return manager.getDrawable();
     }
