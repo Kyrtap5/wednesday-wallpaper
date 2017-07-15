@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -35,35 +36,34 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(Calendar.SECOND, 0);
         pIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, AlarmBroadcastReceiver.class),PendingIntent.FLAG_UPDATE_CURRENT);
         aManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Switch mainSwitch = (Switch) findViewById(R.id.mainSwitch);
-        mainSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) setupAlarm();
-                else cancelAlarm();
-            }
-        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         iHandler.saveDrawable(bChanger.getBackground(), "images", "wallpaper.png");
-        setupAlarm();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.menuSwitch);
+        Switch mainSwitch = (Switch) item.getActionView();
+        mainSwitch.setChecked(sPrefs.getBoolean("active", false));
+        mainSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    setupAlarm();
+                    sPrefs.edit().putBoolean("active", true).commit();
+                    if (Week.checkWeekday(Weekday.WEDNESDAY)) bChanger.changeBackground(R.drawable.wednesday);
+                } else {
+                    cancelAlarm();
+                    sPrefs.edit().putBoolean("active", false).commit();
+                    if (!Week.checkWeekday(Weekday.WEDNESDAY)) bChanger.changeBackground(iHandler.loadBitmap("images", "wallpaper.png"));
+                }
+            }
+        });
         return true;
-    }
-
-    private boolean checkFirstRun() {
-        //Check SharedPreferences for firstrun attribute
-        if (sPrefs.getBoolean("firstrun", true)) {
-            //App started for the first time: save current wallpaper
-            sPrefs.edit().putBoolean("firstrun", false).commit();
-            return true;
-        } else return false;
     }
 
     private void setupAlarm() {

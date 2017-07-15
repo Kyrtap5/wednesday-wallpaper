@@ -15,8 +15,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         iHandler = new ImageHandler(context);
         if (Week.checkWeekday(Weekday.WEDNESDAY)) bChanger.changeBackground(R.drawable.wednesday);
         else if (Week.checkWeekday(Weekday.THURSDAY)){
-            Bitmap bMap = iHandler.loadBitmap("images", "wallpaper.png");
-            bChanger.changeBackground(bMap);
+            bChanger.changeBackground(iHandler.loadBitmap("images", "wallpaper.png"));
         } else {
             iHandler.saveDrawable(bChanger.getBackground(), "images", "wallpaper.png");
         }
