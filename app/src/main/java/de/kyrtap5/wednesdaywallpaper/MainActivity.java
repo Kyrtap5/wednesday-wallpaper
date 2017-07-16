@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private BackgroundChanger bChanger;
     private ImageHandler iHandler;
     private AlarmManager aManager;
-    private PendingIntent pIntent;
+    private PendingIntent midnightIntent;
+    private PendingIntent bootIntent;
     private Calendar calendar;
     private ConstraintLayout cLayout;
 
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        pIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, AlarmBroadcastReceiver.class),PendingIntent.FLAG_UPDATE_CURRENT);
+        midnightIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, AlarmBroadcastReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        bootIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, BootBroadcastReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT);
         aManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         cLayout = (ConstraintLayout) findViewById(R.id.activity_main);
     }
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        iHandler.saveDrawable(bChanger.getBackground(), "images", "wallpaper.png");
+        if (!sPrefs.getBoolean("active", false)) iHandler.saveDrawable(bChanger.getBackground(), "images", "wallpaper.png");
     }
 
     @Override
@@ -79,10 +81,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupAlarm() {
-        aManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
+        aManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, midnightIntent);
+        aManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, bootIntent);
     }
 
     private void cancelAlarm() {
-        aManager.cancel(pIntent);
+        aManager.cancel(midnightIntent);
+        aManager.cancel(bootIntent);
     }
 }
