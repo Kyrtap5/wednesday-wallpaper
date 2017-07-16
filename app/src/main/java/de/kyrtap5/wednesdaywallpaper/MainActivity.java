@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private AlarmManager aManager;
     private PendingIntent pIntent;
     private Calendar calendar;
+    private ConstraintLayout cLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(Calendar.SECOND, 0);
         pIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, AlarmBroadcastReceiver.class),PendingIntent.FLAG_UPDATE_CURRENT);
         aManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        cLayout = (ConstraintLayout) findViewById(R.id.activity_main);
     }
 
     @Override
@@ -49,16 +53,24 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.menuSwitch);
         Switch mainSwitch = (Switch) item.getActionView();
-        mainSwitch.setChecked(sPrefs.getBoolean("active", false));
+        if (sPrefs.getBoolean("active", false)) {
+            mainSwitch.setChecked(true);
+            if (Week.checkWeekday(Weekday.WEDNESDAY)) bChanger.changeBackground(R.drawable.wednesday);
+        } else {
+            mainSwitch.setChecked(false);
+            if (!Week.checkWeekday(Weekday.WEDNESDAY)) bChanger.changeBackground(iHandler.loadBitmap("images", "wallpaper.png"));
+        }
         mainSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     setupAlarm();
                     sPrefs.edit().putBoolean("active", true).commit();
+                    Snackbar.make(cLayout, R.string.active, Snackbar.LENGTH_SHORT).show();
                     if (Week.checkWeekday(Weekday.WEDNESDAY)) bChanger.changeBackground(R.drawable.wednesday);
                 } else {
                     cancelAlarm();
                     sPrefs.edit().putBoolean("active", false).commit();
+                    Snackbar.make(cLayout, R.string.disabled, Snackbar.LENGTH_SHORT).show();
                     if (!Week.checkWeekday(Weekday.WEDNESDAY)) bChanger.changeBackground(iHandler.loadBitmap("images", "wallpaper.png"));
                 }
             }

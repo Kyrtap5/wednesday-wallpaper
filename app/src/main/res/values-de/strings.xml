@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wednesday Wallpaper</string>
+    <string name="switch_description">Verwende den oberen Schalter, um die App zu aktivieren. Das Hintergrund wird danach jeden Mittwoch zu \"It is wednesday my dudes!\" geändert.</string>
+    <string name="active">Hintergrundwechsel aktiviert</string>
+    <string name="disabled">Hintergrundwechsel deaktiviert</string>
+</resources>

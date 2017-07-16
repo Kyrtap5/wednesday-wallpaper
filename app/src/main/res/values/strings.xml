@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Wednesday Wallpaper</string>
+    <string name="switch_description">Use the upper switch to activate the app.\nThe wallpaper will then be changed to \"It is wednesday my dudes!\" each wednesday.</string>
+    <string name="active">Wallpaper change activated</string>
+    <string name="disabled">Wallpaper change disabled</string>
 </resources>
