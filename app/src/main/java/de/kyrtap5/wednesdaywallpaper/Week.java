@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Week {
+    //Extract the weekday from date
     public static Weekday getWeekday(Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -27,6 +28,7 @@ public class Week {
         }
     }
 
+    //Check whether the current date matches the given weekday
     public static boolean checkWeekday(Weekday weekday) {
         return getWeekday(new Date()) == weekday;
     }

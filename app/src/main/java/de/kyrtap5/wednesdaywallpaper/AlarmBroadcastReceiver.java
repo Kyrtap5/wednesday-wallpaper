@@ -13,10 +13,13 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         bChanger = new BackgroundChanger(context);
         iHandler = new ImageHandler(context);
+        //It's wednesday my dudes: change the wallpaper
         if (Week.checkWeekday(Weekday.WEDNESDAY)) bChanger.changeBackground(R.drawable.wednesday);
         else if (Week.checkWeekday(Weekday.THURSDAY)){
+            //Change to old wallpaper on Thursday
             bChanger.changeBackground(iHandler.loadBitmap("images", "wallpaper.png"));
         } else {
+            //Save the current wallpaper
             iHandler.saveDrawable(bChanger.getBackground(), "images", "wallpaper.png");
         }
     }

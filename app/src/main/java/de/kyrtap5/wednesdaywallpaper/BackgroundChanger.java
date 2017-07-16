@@ -27,6 +27,7 @@ public class BackgroundChanger {
         }
     }
 
+    //Change device background to given bitmap
     public void changeBackground(Bitmap bitmap) {
         try {
             manager.setBitmap(bitmap);

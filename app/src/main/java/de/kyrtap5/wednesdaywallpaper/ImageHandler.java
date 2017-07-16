@@ -18,6 +18,7 @@ public class ImageHandler {
         this.context = context;
     }
 
+    //Save a bitmap to internal storage
     public void saveBitmap(Bitmap bMap, String directoryName, String fileName) {
         FileOutputStream fileOutputStream = null;
         try {
@@ -36,10 +37,12 @@ public class ImageHandler {
         }
     }
 
+    //Save a drawable to internal storage
     public void saveDrawable(Drawable drawable, String directoryName, String fileName) {
         saveBitmap(((BitmapDrawable) drawable).getBitmap(), directoryName, fileName);
     }
 
+    //Load up a bitmap from internal storage
     public Bitmap loadBitmap(String directoryName, String fileName) {
         FileInputStream inputStream = null;
         try {
@@ -59,6 +62,7 @@ public class ImageHandler {
         return null;
     }
 
+    //Load up a drawable from internal storage
     public Drawable loadDrawable(String directoryName, String fileName) {
         return new BitmapDrawable(context.getResources(), loadBitmap(directoryName, fileName));
     }
