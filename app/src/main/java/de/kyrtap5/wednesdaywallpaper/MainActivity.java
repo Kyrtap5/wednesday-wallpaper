@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     sPrefs.edit().putBoolean("active", false).commit();
                     Snackbar.make(cLayout, R.string.disabled, Snackbar.LENGTH_SHORT).show();
                     //Load up the old wallpaper and change it for every other weekday
-                    if (!Week.checkWeekday(Weekday.WEDNESDAY)) bChanger.changeBackground(iHandler.loadBitmap("images", "wallpaper.png"));
+                    bChanger.changeBackground(iHandler.loadBitmap("images", "wallpaper.png"));
                 }
             }
         });
